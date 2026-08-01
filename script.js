@@ -547,7 +547,7 @@ realPolaroids.forEach((src, i) => {
 const guessMemoriesGrid = document.getElementById('guessMemoriesGrid');
 const guessData = [
   { src: 'IMG-20250303-WA0011.jpg', clue: 'Double tap to reveal where this gorgeous smile was shining.' },
-  { src: '20250509_1841_Black and White Portrait_remix_01jtths6aseer922b7nyv6jb4b (1).PNG', clue: 'This gorgeous portrait is waiting to be uncovered.' },
+  { src: 'FB_IMG_1784735929225.jpg  ', clue: 'This gorgeous portrait is waiting to be uncovered.' },
   { src: 'IMG-20260123-WA0000.jpg', clue: 'Uncover the story of this serene winter moment.' },
   { src: 'Snapchat-1983143753.jpg', clue: 'Where did this cozy laughter take place?' }
 ];

@@ -1,0 +1,449 @@
+/* ═══════════════════════════════════════
+   PREMIUM ENHANCEMENTS V2 — enhancements_v2.css
+═══════════════════════════════════════ */
+
+/* ── EBOOK CHAPTER DOTS ── */
+.ebook-chapters {
+  position: fixed; left: 1.5rem; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 14px; z-index: 999;
+}
+.chapter-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: rgba(240,207,142,0.3);
+  border: 1px solid rgba(240,207,142,0.6); position: relative; transition: all 0.3s ease;
+}
+.chapter-dot::after {
+  content: attr(data-label); position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; color: #f0cf8e;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s; white-space: nowrap;
+}
+.chapter-dot:hover::after, .chapter-dot.active::after { opacity: 1; }
+.chapter-dot.active { background: #e8a7bb; box-shadow: 0 0 12px #e8a7bb; transform: scale(1.3); }
+
+/* ── THEN VS NOW SPLIT SCREEN ── */
+.split-screen-section {
+  display: flex; position: relative; height: 90vh; overflow: hidden;
+  border-radius: 24px; border: 1.5px solid rgba(212,175,106,.2); margin: 2rem 0;
+}
+.split-pane {
+  flex: 1; position: relative; overflow: hidden; transition: filter 0.5s ease;
+}
+.split-pane img {
+  width: 100%; height: 100%; object-fit: cover;
+  position: absolute; top: 0; left: 0;
+}
+.split-split {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+  background: #f0cf8e; box-shadow: 0 0 10px #f0cf8e; z-index: 10;
+  cursor: ew-resize; transform: translateX(-50%);
+}
+.split-label {
+  position: absolute; bottom: 2rem; background: rgba(26,11,22,0.75);
+  padding: 6px 14px; border-radius: 99px; font-family: 'Playfair Display', serif;
+  font-size: 0.9rem; color: #f0cf8e; border: 1px solid rgba(240,207,142,0.3);
+  z-index: 15;
+}
+.split-pane.left .split-label { left: 2rem; }
+.split-pane.right .split-label { right: 2rem; }
+
+/* ── TEXTING CHAT UI ── */
+.chat-container {
+  max-width: 380px; margin: 1.5rem auto; background: rgba(28,13,26,0.85);
+  border: 1px solid var(--border-color, rgba(212,175,106,.3));
+  border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); overflow: hidden;
+}
+.chat-header {
+  background: rgba(255,255,255,0.03); padding: 12px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.chat-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid #d3ac68; }
+.chat-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: #fff; }
+.chat-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto; }
+.chat-bubble {
+  max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 0.9rem; line-height: 1.4;
+}
+.chat-bubble.sent {
+  align-self: flex-end; background: linear-gradient(135deg, #e8a7bb, #b79fd6); color: #1c0f1a;
+  border-bottom-right-radius: 4px;
+}
+.chat-bubble.received {
+  align-self: flex-start; background: rgba(255,255,255,0.08); color: #f8ecdf;
+  border-bottom-left-radius: 4px;
+}
+
+/* ── BOARDING PASS TICKET ── */
+.boarding-pass {
+  background: radial-gradient(circle at 100% 50%, #09040d 15px, transparent 16px),
+              radial-gradient(circle at 0% 50%, #09040d 15px, transparent 16px),
+              rgba(255,255,255,0.03);
+  background-position: right, left; background-size: 100%; border: 1.5px dashed rgba(240,207,142,0.3);
+  border-radius: 12px; padding: 2rem; margin: 1.5rem auto; max-width: 450px;
+  position: relative; overflow: hidden;
+}
+.boarding-pass h4 { font-family: 'Playfair Display', serif; color: #f0cf8e; margin: 0 0 1rem; }
+.pass-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
+.pass-col { font-family: 'Cormorant Garamond', serif; }
+.pass-col span { display: block; font-size: 0.72rem; opacity: 0.5; text-transform: uppercase; }
+.pass-barcode {
+  height: 40px; margin-top: 1rem;
+  background: repeating-linear-gradient(90deg, #f0cf8e 0px, #f0cf8e 2px, transparent 2px, transparent 6px, #e8a7bb 6px, #e8a7bb 8px);
+  opacity: 0.75;
+}
+
+/* ── RECEIPT STYLE CARD ── */
+.receipt-card {
+  max-width: 320px; margin: 1.5rem auto; background: #fff; color: #000;
+  border-radius: 8px; padding: 2rem 1.5rem; font-family: monospace; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  position: relative;
+}
+.receipt-card::after {
+  content: ''; position: absolute; bottom: -8px; left: 0; right: 0; height: 8px;
+  background: repeating-linear-gradient(45deg, transparent, transparent 4px, #fff 4px, #fff 8px);
+}
+.receipt-header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 12px; margin-bottom: 12px; }
+.receipt-item { display: flex; justify-content: space-between; margin-bottom: 6px; }
+
+/* ── SPIN VINYL PLAYER ── */
+.vinyl-player {
+  position: relative; width: 220px; height: 220px; margin: 0 auto 1rem;
+}
+.vinyl-disc {
+  width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, #333 4%, #000 12%, #111 20%, #000 35%, #222 45%, #000 60%);
+  border: 1px dashed rgba(240,207,142,0.4);
+  position: absolute; top: 10px; left: 10px; z-index: 10;
+  animation: albumSpin 4s linear infinite paused;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+.vinyl-center {
+  width: 70px; height: 70px; border-radius: 50%; background: #d3ac68;
+  position: absolute; top: 65px; left: 65px; z-index: 12; display: flex; align-items: center; justify-content: center;
+}
+.vinyl-center img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; }
+.vinyl-needle {
+  position: absolute; top: 0; right: 10px; width: 60px; height: 110px; z-index: 15;
+  transform-origin: top right; transform: rotate(-35deg); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.vinyl-player.playing .vinyl-disc   { animation-play-state: running; }
+.vinyl-player.playing .vinyl-needle { transform: rotate(-5deg); }
+
+/* ── PLANT GROWTH PANEL ── */
+.plant-box { text-align: center; margin: 2rem auto; max-width: 320px; }
+.plant-canvas { display: block; margin: 0 auto; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1px solid rgba(240,207,142,0.15); }
+
+/* ── BEACH SAND CANVAS ── */
+.beach-sand-wrap { position: relative; border-radius: 20px; overflow: hidden; margin: 2rem 0; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.beach-sand-canvas { display: block; width: 100%; height: 350px; cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="%23d3ac68" stroke-width="2"/></svg>') 10 10, auto; }
+.beach-sand-overlay {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, transparent 70%, rgba(30,144,255,0.15) 100%);
+}
+
+/* ── INTERACTIVE CONSTELATION MAP ── */
+.star-constellation-wrap { position: relative; width: 100%; min-height: 460px; background: rgba(5,4,12,0.95); border-radius: 20px; border: 1.5px solid rgba(240,207,142,0.25); overflow: hidden; margin: 1.5rem 0; padding: 1.6rem; }
+.constellation-target-hint { position: absolute; top: 1.3rem; left: 50%; transform: translateX(-50%); font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: #f0cf8e; letter-spacing: 0.1em; pointer-events: none; z-index: 2; }
+.constellation-photo-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  transform: translateY(16px) scale(0.92);
+  z-index: 2;
+}
+.constellation-photo-overlay.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.constellation-photo-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.12), transparent 55%);
+  pointer-events: none;
+}
+.constellation-photo-overlay img {
+  max-width: 86%;
+  max-height: 86%;
+  width: auto;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+  transform: translateY(0);
+}
+
+/* ── PRESCRIPTION CARD ── */
+.prescription-card {
+  max-width: 360px; margin: 1.5rem auto; background: #fffdf9; color: #2c2923; border: 3px double #d3ac68; border-radius: 6px; padding: 1.8rem; font-family: 'Lora', serif; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+.rx-rx { font-family: 'Playfair Display', serif; font-size: 2.8rem; line-height: 1; color: #d3ac68; margin-bottom: 0.8rem; }
+
+/* ── APP REVIEW CARD ── */
+.app-review {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(240,207,142,0.2); border-radius: 12px; padding: 1rem 1.5rem; text-align: left; max-width: 400px; margin: 1rem auto;
+}
+.review-stars { color: #f0cf8e; margin-bottom: 0.5rem; font-size: 1.2rem; }
+
+/* ── BRANCHING CYOA adventure ── */
+.cyoa-panel {
+  max-width: 440px; margin: 1.5rem auto; padding: 1.8rem; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(212,175,106,.22); border-radius: 20px; text-align: center;
+}
+.cyoa-title { font-family: 'Playfair Display', serif; color: #f0cf8e; margin: 0 0 0.8rem; }
+.cyoa-choices { display: flex; gap: 12px; justify-content: center; margin-top: 1.2rem; }
+
+/* ── INDIVIDUAL CANDLE lighting ritual ── */
+.candle-ritual-room {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 480px; margin: 2rem auto;
+}
+.ritual-candle {
+  width: 32px; height: 50px; background: rgba(255,255,255,0.04); border: 1px solid rgba(240,207,142,0.25); border-radius: 6px; cursor: pointer; transition: all 0.3s; position: relative;
+}
+.ritual-candle.lit {
+  background: rgba(232,167,187,0.18); border-color: #f0cf8e; box-shadow: 0 0 10px rgba(240,207,142,0.5);
+}
+.ritual-candle::before {
+  content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%) scale(0); width: 10px; height: 16px; background: radial-gradient(circle, #ff8c00, #ffb347 70%); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transition: transform 0.4s ease;
+}
+.ritual-candle.lit::before { transform: translateX(-50%) scale(1); animation: flameFlicker 1s ease infinite alternate; }
+@keyframes flameFlicker { from{transform:translateX(-50%) scale(0.9) skewX(-2deg)} to{transform:translateX(-50%) scale(1.1) skewX(2deg)} }
+
+/* ── PRESSED FLOWER borders ── */
+.pressed-flower-bordered {
+  position: relative; padding: 2.2rem;
+}
+.pressed-flower-bordered::before {
+  content: '🌿 🌸 🍃 🏵️'; position: absolute; left: 1rem; right: 1rem; top: 0.5rem; text-align: center; opacity: 0.45; letter-spacing: 1.2em; font-size: 0.8rem;
+}
+.pressed-flower-bordered::after {
+  content: '🌿 🌸 🍃 🏵️'; position: absolute; left: 1rem; right: 1rem; bottom: 0.5rem; text-align: center; opacity: 0.45; letter-spacing: 1.2em; font-size: 0.8rem;
+}
+
+/* ── WAX SEAL animation ── */
+.wax-seal-seal {
+  width: 75px; height: 75px; background: #962635; border-radius: 50%; position: relative; cursor: pointer; border: 2.5px solid #d3ac68; box-shadow: 0 6px 15px rgba(0,0,0,0.5); margin: 1.5rem auto; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; transition: transform 0.3s;
+}
+.wax-seal-seal:hover { transform: scale(1.08) rotate(12deg); }
+.wax-seal-seal.broken { animation: sealBreak 0.6s ease forwards; pointer-events: none; }
+@keyframes sealBreak {
+  to { transform: scale(0) rotate(45deg); opacity: 0; }
+}
+
+/* ── INTERACTIVE CHRONOLOGICAL TIMELINE ── */
+.timeline-horizontal {
+  display: flex; gap: 20px; overflow-x: auto; padding: 20px 10px; scrollbar-width: thin; scrollbar-color: #d3ac68 transparent;
+}
+.timeline-node {
+  flex: 0 0 150px; background: rgba(255,255,255,0.03); border: 1px solid rgba(240,207,142,0.2); border-radius: 12px; padding: 1.2rem 0.8rem; text-align: center; transition: transform 0.25s;
+}
+.timeline-node:hover { transform: translateY(-4px); border-color: #f0cf8e; }
+.timeline-node .node-yr { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #f0cf8e; margin-bottom: 4px; }
+.timeline-node .node-word { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 600; font-size: 1.1rem; color: #e8a7bb; }
+
+/* ── REPORT CARD BOARD ── */
+.report-card-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin: 1.5rem auto; max-width: 480px;
+}
+.report-row {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(240,207,142,0.15); border-radius: 10px; padding: 1rem; text-align: center;
+}
+.report-num { font-size: 1.8rem; font-family: 'Playfair Display', serif; color: #f0cf8e; }
+
+/* ── COMIC-STRIP/DAILY ROUTINE CAROUSEL ── */
+.comic-strip-carousel {
+  display: flex; overflow-x: auto; gap: 16px; padding: 10px 0;
+}
+.comic-panel {
+  flex: 0 0 240px; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(240,207,142,0.22); border-radius: 16px; padding: 1rem; text-align: center;
+}
+.comic-panel-art { font-size: 3rem; margin-bottom: 0.8rem; }
+.comic-panel-text { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; }
+
+/* ── OTHER ASSETS ── */
+.custom-greeting { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #f0cf8e; margin: 0.6rem 0; }
+.geo-weather-bar { font-family: 'Cormorant Garamond', serif; font-size: 0.92rem; opacity: 0.72; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 6px; display: inline-block; margin-top: 5px; }
+
+/* ── MAP CONTAINER ── */
+.svg-map-container {
+  width: 100%; max-width: 580px; height: 320px; background: rgba(10,5,15,0.7); border-radius: 20px; border: 1.5px solid rgba(240,207,142,0.2); overflow: hidden; position: relative; margin: 2rem auto;
+}
+.distance-shrink-line {
+  stroke-dasharray: 8px 4px;
+}
+
+/* ── CANDLE LIGHTING RITUAL ── */
+.candle-ritual-message {
+  margin-top: 1rem; font-size: 0.92rem; letter-spacing: 0.1em; line-height: 1.6; color: #f4e1c2;
+  background: rgba(12, 5, 12, 0.55); border: 1px solid rgba(240,207,142,0.18); border-radius: 16px; padding: 1rem; min-height: 80px;
+}
+.candle-ritual-room { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 1rem; }
+
+/* ── ORIGAMI NOTE ── */
+.friendship-license-card {
+  width: min(660px, 100%);
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+  border: 1px solid rgba(240,207,142,0.2);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 24px 50px rgba(0,0,0,0.35);
+  display: grid;
+  gap: 1.25rem;
+}
+.license-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.license-title-text {
+  display: grid;
+  gap: 0.25rem;
+}
+.license-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240,207,142,0.9);
+}
+.friendship-license-card strong {
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  display: block;
+  color: #f8e9d3;
+  letter-spacing: 0.02em;
+}
+.license-badge {
+  align-self: flex-start;
+  background: rgba(240,207,142,0.14);
+  color: #f0cf8e;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  border: 1px solid rgba(240,207,142,0.25);
+}
+.license-body {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 1.4rem;
+  align-items: center;
+}
+.license-photo-wrap {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(232,167,187,0.10));
+  border: 1px solid rgba(240,207,142,0.18);
+  border-radius: 24px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.license-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.license-info {
+  display: grid;
+  gap: 0.9rem;
+}
+.license-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+.license-role {
+  font-size: 1rem;
+  color: #f0d9bb;
+}
+.license-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #f5e6d2;
+  font-size: 0.94rem;
+}
+.license-row span {
+  opacity: 0.72;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.license-barcode {
+  height: 58px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.12) 12%, rgba(255,255,255,0.42) 12%, rgba(255,255,255,0.12) 14%, rgba(255,255,255,0.12) 20%, rgba(255,255,255,0.42) 20%, rgba(255,255,255,0.12) 24%, rgba(255,255,255,0.12) 32%, rgba(255,255,255,0.42) 32%, rgba(255,255,255,0.12) 36%, rgba(255,255,255,0.12) 44%, rgba(255,255,255,0.42) 44%, rgba(255,255,255,0.12) 48%, rgba(255,255,255,0.12) 56%, rgba(255,255,255,0.42) 56%, rgba(255,255,255,0.12) 60%, rgba(255,255,255,0.12) 68%, rgba(255,255,255,0.42) 68%, rgba(255,255,255,0.12) 72%, rgba(255,255,255,0.12) 80%, rgba(255,255,255,0.42) 80%, rgba(255,255,255,0.12) 84%, rgba(255,255,255,0.12) 92%, rgba(255,255,255,0.42) 92%, rgba(255,255,255,0.12) 96%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+.license-note {
+  font-size: 0.9rem;
+  color: rgba(240,207,142,0.8);
+  text-align: center;
+  padding-top: 0.4rem;
+  letter-spacing: 0.03em;
+}
+
+/* ── NIGHT SKY WISH ── */
+.nightwish-panel { display: grid; gap: 1rem; max-width: 520px; margin: 1.5rem auto; padding: 1.4rem; background: rgba(10,6,20,0.85); border-radius: 24px; border: 1px solid rgba(240,207,142,0.2); position: relative; }
+.shooting-star {
+  width: 72px; height: 72px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, #e8a7bb 45%, rgba(232,167,187,0.3) 100%);
+  border: 1px solid rgba(240,207,142,0.4); font-size: 1.8rem; cursor: pointer; box-shadow: 0 0 24px rgba(232,167,187,0.35);
+}
+.wish-form { display: flex; gap: 10px; opacity: 0.65; pointer-events: none; transition: opacity 0.4s ease; }
+.wish-form.active { opacity: 1; pointer-events: auto; }
+.wish-form input:focus { outline: 2px solid rgba(240,207,142,0.8); outline-offset: 2px; }
+.wish-form input { flex: 1; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(240,207,142,0.25); background: rgba(255,255,255,0.04); color: #f8ece3; }
+.wish-feedback { min-height: 32px; height: auto; font-size: 1rem; color: #f0cf8e; transition: transform 0.32s ease, opacity 0.32s ease; }
+.wish-feedback.error { color: #ff9a9a; transform: translateY(0); }
+.wish-feedback.launching { animation: wishTrail 1.2s ease-out forwards; }
+.wish-feedback.granted { animation: grantedPulse 1.1s ease both; color: #a6ffb0; text-shadow: 0 0 18px rgba(166,255,176,0.6); }
+@keyframes wishTrail { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-40px) translateX(20px); opacity: 0; } }
+@keyframes grantedPulse { 0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+ }
+
+/* ── BREATH FOG PHOTO REVEAL ── */
+.fog-photo-wrap { position: relative; max-width: 520px; margin: 1.5rem auto; height: 280px; border-radius: 24px; overflow: hidden; background: linear-gradient(180deg, #2f1f3d, #1b0d24); display: grid; place-items: center; cursor: pointer; }
+.fog-image { width: 100%; height: 100%; display: grid; place-items: center; color: #fff; font-size: 1.1rem; padding: 1.5rem; text-align: center; background: linear-gradient(180deg, rgba(250,200,230,0.1), rgba(40,18,50,0.4)); transition: filter 0.4s ease, opacity 0.4s ease; }
+.fog-overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(255,255,255,0.25), rgba(255,255,255,0.06)); backdrop-filter: blur(8px); display: grid; place-items: center; color: #f0cf8e; font-family: 'Cormorant Garamond', serif; cursor: pointer; transition: opacity 0.6s ease, transform 0.6s ease; z-index: 2; }
+.section .fog-photo-wrap.cleared .fog-overlay, .fog-photo-wrap.cleared .fog-overlay { opacity: 0; transform: translateY(-20px); pointer-events: none; }
+.fog-photo-wrap.cleared .fog-image { filter: brightness(1.2); }
+
+/* ── DRAFT MESSAGE REVEAL ── */
+.draft-message { margin: 1rem auto 1.5rem; max-width: 540px; background: rgba(12,7,22,0.85); border: 1px solid rgba(240,207,142,0.18); border-radius: 20px; overflow: hidden; }
+.draft-header { background: rgba(255,255,255,0.05); padding: 12px 16px; font-family: 'Playfair Display', serif; font-size: 0.95rem; color: #f0cf8e; }
+.draft-body { padding: 16px; color: #f5e2d7; font-size: 0.95rem; line-height: 1.6; min-height: 90px; }
+
+/* ── ORIGAMI POP-OUT IMAGE ── */
+.origami-note-card { width: min(520px,100%); margin: 1.5rem auto; position: relative; perspective: 1100px; }
+.origami-popout {
+  position: absolute;
+  width: min(260px, 38vw);
+  max-width: 300px;
+  border-radius: 22px;
+  box-shadow: 0 35px 70px rgba(0,0,0,0.45);
+  opacity: 0;
+  transform: translateY(24px) scale(0.95);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  z-index: 25;
+  pointer-events: none;
+}
+.origami-popout.visible { opacity: 1; transform: translateY(-20px) scale(1); }
+.origami-popout[src] { display: block; width: 100%; height: auto; border-radius: inherit; }
+
+/* ── CANDLE WAX SCROLL PROGRESS BAR ── */
+.wax-progress { position: fixed; right: 1.5rem; top: 50%; transform: translateY(-50%); width: 24px; height: 260px; border-radius: 18px; background: rgba(16,9,22,0.85); border: 1px solid rgba(240,207,142,0.2); box-shadow: 0 0 30px rgba(255,255,255,0.05); overflow: hidden; z-index: 1000; }
+.wax-progress-track { position: relative; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08)); }
+.wax-progress-fill { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(180deg, #f5d7a9, #d59a68); transition: height 0.15s ease; }
+
+/* ── FINAL REASSURANCE NOTE ── */
+.page-reassurance-note .section-inner { display: grid; gap: 1rem; text-align: center; }
+.page-reassurance-note .section-sub { max-width: 620px; margin: 0 auto; opacity: 0.78; }
