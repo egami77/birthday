@@ -45,8 +45,8 @@
   <div class="hero-photo-frame">
     <img src="file_0000000004c071fabea6c69ec86982a6.png" alt="Samikshya" onerror="placeholderImg(this,'file_0000000004c071fabea6c69ec86982a6.png')">
   </div>
-  <div class="hero-name script">Samikshya</div>
-  <h1>Happy 25th Birthday ❤</h1>
+  <div class="hero-name script" id="heroName" data-split="true">Samikshya</div>
+  <h1 id="heroH1" data-split="true">Happy 25th Birthday ❤</h1>
   <p class="tagline">To the most beautiful person — even thousands of miles could never make you feel far from my heart.</p>
   
   <!-- Live Days Timer -->
@@ -372,8 +372,75 @@
 <section class="section reveal-el" id="reasons25">
   <div class="section-inner glass">
     <div class="eyebrow">A special list</div>
-    <h2 class="section-title">25 Reasons You're Amazing</h2>
+    <h2 class="section-title"><span class="count-display" id="countDisplay">0</span>Reasons You're Amazing</h2>
     <div class="reasons-25" id="reasons25Grid"></div>
+  </div>
+</section>
+
+<!-- Open When Letters -->
+<section class="section reveal-el" id="open-when-sec">
+  <div class="section-inner">
+    <div class="eyebrow">Letters sealed with love</div>
+    <h2 class="section-title">Open When...</h2>
+    <p class="section-sub">Each envelope holds a note written just for that moment. Choose one to unveil.</p>
+    <div class="open-when-grid" id="openWhenGrid"></div>
+  </div>
+</section>
+
+<!-- Map Drop Pin -->
+<section class="section reveal-el" id="map-pin-sec">
+  <div class="section-inner glass">
+    <div class="eyebrow">Where are you reading this?</div>
+    <h2 class="section-title">Drop Your Pin</h2>
+    <p class="section-sub">Tap anywhere on the map to mark where you're reading this from.</p>
+    <div class="map-interactive" id="mapInteractive">
+      <svg viewBox="0 0 400 180" id="mapDropSvg" style="width:100%;cursor:crosshair;">
+        <path class="flight-path" d="M70 110 Q200 20 330 90" stroke="#d3ac68" stroke-width="1.6" fill="none" opacity=".8"/>
+        <circle cx="70" cy="110" r="5" fill="#e8a7bb"/>
+        <text x="70" y="135" text-anchor="middle" class="pin-label">🇳🇵 Nepal</text>
+        <circle cx="330" cy="90" r="5" fill="#b79fd6"/>
+        <text x="330" y="115" text-anchor="middle" class="pin-label">🇲🇻 Maldives</text>
+        <text x="200" y="50" text-anchor="middle" font-size="20" class="plane">✈️</text>
+      </svg>
+      <div class="drop-hint">👆 Tap to drop your pin on the map</div>
+    </div>
+    <div class="map-distance-badge" id="mapDistanceBadge"></div>
+  </div>
+</section>
+
+<!-- Your Turn Reply -->
+<section class="section reveal-el" id="your-turn-sec">
+  <div class="section-inner">
+    <div class="eyebrow">Write back</div>
+    <h2 class="section-title">Your Turn ❤</h2>
+    <p class="section-sub">What do you want to say? Write anything — a wish, a memory, a feeling. I want to hear you.</p>
+    <div class="your-turn-wrap">
+      <textarea class="your-turn-textarea" id="yourTurnText" placeholder="Write something to send into the universe..."></textarea>
+      <div class="your-turn-send">
+        <button class="btn btn-primary" id="yourTurnBtn">Send Into the Universe ✨</button>
+      </div>
+      <div class="your-turn-confirm" id="yourTurnConfirm">💌 Your words are floating across the Indian Ocean, straight to my heart. Thank you. ❤</div>
+    </div>
+  </div>
+</section>
+
+<!-- Future Letter to Age 30 -->
+<section class="section reveal-el" id="future-letter-sec">
+  <div class="section-inner glass">
+    <div class="eyebrow">A message across time</div>
+    <h2 class="section-title">A Letter to Samikshya at 30</h2>
+    <p class="section-sub">Write something she'll open in 5 years. Then seal it forever.</p>
+    <div class="future-letter-wrap" id="futureLetterWrap">
+      <textarea class="future-letter-editor" id="futureLetterText" placeholder="Dear Samikshya at 30... I hope by now you've seen the world, chased your dreams, and laughed until your sides hurt. Here's what I wanted you to remember..."></textarea>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="btn btn-gold" id="sealFutureBtn">🕯️ Seal This Letter</button>
+      </div>
+      <div class="future-letter-sealed" id="futureLetterSealed">
+        <div class="seal-wax">🔐</div>
+        <h3 style="font-family:'Playfair Display',serif; color:#f0cf8e; margin:12px 0 6px;">Sealed Until She's 30</h3>
+        <p>This letter is held safely in our hearts. Don't open until August 24, 2031. ❤</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -381,13 +448,20 @@
   <div class="section-inner">
     <div class="eyebrow">Last thing, I promise</div>
     <h2 class="section-title">A Little Surprise</h2>
-    <button class="btn btn-gold finale-btn" id="finaleBtn">Click Me</button>
+    <button class="btn btn-gold finale-btn" id="finaleBtn">Click Me ❤</button>
     <div id="finaleFireworks" class="fireworks-container"></div>
     <div style="margin-top:1.5rem; font-size:1.15rem; opacity:.8;">No matter where life takes you... I'll always celebrate you.</div>
   </div>
 </section>
 
 <footer class="section" style="padding-top:0; text-align:center; color:rgba(248,236,223,.7); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:.95rem;">Made with love — from Nepal 🇳🇵 to Maldives 🇲🇻</footer>
+
+<!-- Hidden Easter Egg -->
+<div id="easterEgg" title="Psst...">♥</div>
+<div class="easter-popup" id="easterPopup">
+  You found my little secret corner. 🌸<br><br>
+  This is the part of the page only the curious ones find. And you are exactly that — curious, bright, beautiful. Don't ever stop exploring. ❤
+</div>
 
 <div id="lightbox">
   <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>

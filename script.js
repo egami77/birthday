@@ -1244,3 +1244,308 @@ function spawnFloaty() {
   setTimeout(() => el.remove(), duration * 1000 + 200);
 }
 setInterval(spawnFloaty, 750);
+
+// ═══════════════════════════════════════════
+// PREMIUM FEATURE ADDITIONS
+// ═══════════════════════════════════════════
+
+// A. Staggered hero text reveal
+function splitAndReveal(elId, delay = 0) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const original = el.textContent;
+  el.innerHTML = [...original].map(ch =>
+    `<span class="split-letter">${ch === ' ' ? '&nbsp;' : ch}</span>`
+  ).join('');
+  el.querySelectorAll('.split-letter').forEach((s, i) => {
+    setTimeout(() => s.classList.add('visible'), delay + i * 55);
+  });
+}
+// Trigger after loader closes
+const beginBtnEl = document.getElementById('beginBtn');
+if (beginBtnEl) {
+  beginBtnEl.addEventListener('click', () => {
+    setTimeout(() => splitAndReveal('heroName', 400), 700);
+    setTimeout(() => splitAndReveal('heroH1', 900), 1100);
+  });
+}
+
+// B. Hero parallax on scroll (stars slow, frame fast)
+window.addEventListener('scroll', () => {
+  const heroEl = document.getElementById('hero');
+  if (!heroEl) return;
+  const scrollY = window.scrollY;
+  const heroH = heroEl.offsetHeight;
+  if (scrollY > heroH) return;
+  const factor = scrollY / heroH;
+  const canvas = heroEl.querySelector('.stars');
+  const frame = heroEl.querySelector('.hero-photo-frame');
+  if (canvas) canvas.style.transform = `translateY(${factor * 60}px)`;    // slow
+  if (frame)  frame.style.transform  = `translateY(${factor * -30}px)`;   // slight opposite lift
+}, { passive: true });
+
+// C. Magnetic button effect
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
+    btn.style.transform = `translate(${dx * 0.18}px, ${dy * 0.18}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+
+// D. Ripple / glow ring on every click
+document.addEventListener('click', (e) => {
+  const ring = document.createElement('div');
+  ring.className = 'ripple-ring';
+  const size = 60;
+  ring.style.width = `${size}px`;
+  ring.style.height = `${size}px`;
+  ring.style.left = `${e.clientX - size/2}px`;
+  ring.style.top = `${e.clientY - size/2}px`;
+  document.body.appendChild(ring);
+  setTimeout(() => ring.remove(), 750);
+});
+
+// E. Ken Burns — apply to growing grid and carousel images
+function applyKenBurns(imgs) {
+  const classes = ['ken-burns-1','ken-burns-2','ken-burns-3'];
+  imgs.forEach((img, i) => {
+    img.classList.add(classes[i % 3]);
+    img.parentElement.style.overflow = 'hidden';
+  });
+}
+// Wait for DOM grids to populate
+setTimeout(() => {
+  applyKenBurns(document.querySelectorAll('.grow-item img'));
+  applyKenBurns(document.querySelectorAll('#storyPhotos img'));
+}, 800);
+
+// F. Polaroid developing effect — trigger when polaroid enters viewport
+const polaroidObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target.querySelector('img');
+      if (img && !img.classList.contains('developing')) {
+        img.classList.add('developing');
+        polaroidObserver.unobserve(entry.target);
+      }
+    }
+  });
+}, { threshold: 0.2 });
+setTimeout(() => {
+  document.querySelectorAll('.polaroid').forEach(p => polaroidObserver.observe(p));
+}, 700);
+
+// G. Flip chapter cards rebuild
+setTimeout(() => {
+  const chGrid = document.getElementById('chapterGrid');
+  if (!chGrid) return;
+  const captions = [
+    "The beginning of this beautiful story.",
+    "A moment where joy ran freely.",
+    "Quiet, perfect, and warm.",
+    "Looking forward to everything ahead.",
+    "Surrounded by people who love you.",
+    "This photo says more than words could.",
+    "You shine so naturally here."
+  ];
+  const figures = [...chGrid.querySelectorAll('figure')];
+  figures.forEach((fig, i) => {
+    const img = fig.querySelector('img');
+    if (!img) return;
+    const src = img.src;
+    const alt = img.alt;
+    const oerr = img.getAttribute('onerror');
+    const flipCard = document.createElement('div');
+    flipCard.className = 'flip-card';
+    flipCard.innerHTML = `
+      <div class="flip-card-inner">
+        <div class="flip-front"><img src="${src}" alt="${alt}" onerror="${oerr || ''}"></div>
+        <div class="flip-back"><div class="flip-back-text">${captions[i % captions.length]}</div></div>
+      </div>`;
+    flipCard.addEventListener('click', () => openLightbox(src, false));
+    fig.parentNode.replaceChild(flipCard, fig);
+  });
+}, 900);
+
+// H. Count-up animation on "25 Reasons" section
+const countDisplay = document.getElementById('countDisplay');
+let countDone = false;
+if (countDisplay) {
+  const countObserver = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !countDone) {
+      countDone = true;
+      let n = 0;
+      const interval = setInterval(() => {
+        n++;
+        countDisplay.textContent = n;
+        if (n >= 25) clearInterval(interval);
+      }, 60);
+      // Confetti trail as it counts
+      const confettiInterval = setInterval(() => {
+        const c = document.createElement('div');
+        c.className = 'cursor-trail-particle';
+        c.textContent = ['❤','✨','🌸','💖'][Math.floor(Math.random()*4)];
+        c.style.left = `${20 + Math.random() * 60}vw`;
+        c.style.top = `${Math.random() * 60 + 20}vh`;
+        c.style.color = '#e8a7bb';
+        document.body.appendChild(c);
+        c.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(2) translateY(-40px)'}],{duration:700,fill:'forwards'});
+        setTimeout(()=>c.remove(),750);
+      }, 100);
+      setTimeout(() => clearInterval(confettiInterval), 25 * 60 + 500);
+      countObserver.disconnect();
+    }
+  }, { threshold: 0.4 });
+  countObserver.observe(document.getElementById('reasons25'));
+}
+
+// I. Snow of hearts — finale section only
+const finaleSection = document.getElementById('finale');
+let snowInterval = null;
+if (finaleSection) {
+  const snowObserver = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      if (!snowInterval) {
+        snowInterval = setInterval(() => {
+          const s = document.createElement('div');
+          s.className = 'snow-heart';
+          s.textContent = ['❤','♥','💖','🌸'][Math.floor(Math.random()*4)];
+          s.style.left = `${Math.random() * 100}vw`;
+          s.style.animationDuration = `${3 + Math.random() * 4}s`;
+          s.style.fontSize = `${0.9 + Math.random() * 1.2}rem`;
+          s.style.color = ['#e8a7bb','#f0cf8e','#b79fd6','#f2c6d3'][Math.floor(Math.random()*4)];
+          document.body.appendChild(s);
+          setTimeout(() => s.remove(), 7500);
+        }, 350);
+      }
+    } else {
+      clearInterval(snowInterval);
+      snowInterval = null;
+    }
+  }, { threshold: 0.1 });
+  snowObserver.observe(finaleSection);
+}
+
+// J. Open When letters
+const openWhenGrid = document.getElementById('openWhenGrid');
+const openWhenLetters = [
+  { icon:'😔', title:'Open when you miss me', text:'If you are missing me right now — good. It means something real exists between us that distance cannot shrink. I miss you too, every single day in ways I never expected. Keep this note next to you and know I am thinking of you in whatever room I am in right now. ❤' },
+  { icon:'😰', title:'Open when you\'re stressed', text:'Breathe in for 4 counts. Then out for 4. Again. Do you feel it? You are capable. You have survived every hard day before this one and you will survive this. The stress feels permanent but it never is. You are stronger than today. I believe in you more than you know. 🌸' },
+  { icon:'🌊', title:'Open when you feel far from home', text:'Home is not only a place — it is also a feeling you carry within you. Your warmth, your laughter, your heart: that is home. And wherever you go across this ocean, you take it all with you. You are never truly far. Someone across the sea already has a piece of you. 💙' },
+  { icon:'🎉', title:'Open when you want to celebrate', text:'Yes! You deserve every celebration! Whatever just happened — a small win, finishing a hard day, getting through the week — it all counts. Pop something, play your favorite song, and know I am clapping for you right now from Nepal. You are amazing and this is your moment. 🥂' },
+  { icon:'🌙', title:'Open when you can\'t sleep', text:'The night gets quiet and your mind starts racing. I know that feeling. On those nights, look at the stars if you can. We are always under the same sky. Count three things you are grateful for. Then three things that make you smile. I hope I am on that last list. Goodnight. ❤' },
+  { icon:'💪', title:'Open when you doubt yourself', text:'Someone who has come this far, done this much, and smiled through it all does not get to call herself ordinary. You are a force of nature disguised as a humble, soft-hearted person. The world has no idea what is coming when you decide to fully rise. I already know. 🌟' }
+];
+if (openWhenGrid) {
+  openWhenLetters.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'open-when-card';
+    card.innerHTML = `
+      <span class="ow-icon">${item.icon}</span>
+      <div class="ow-title">${item.title}</div>
+      <div class="ow-hint">tap to open</div>
+      <div class="ow-content"><p>${item.text}</p></div>`;
+    card.addEventListener('click', () => {
+      const content = card.querySelector('.ow-content');
+      const isOpen = content.classList.toggle('open');
+      if (isOpen) {
+        playChime([523.25, 659.25]);
+        card.querySelector('.ow-hint').textContent = 'tap to close';
+      } else {
+        playWhoosh();
+        card.querySelector('.ow-hint').textContent = 'tap to open';
+      }
+    });
+    openWhenGrid.appendChild(card);
+  });
+}
+
+// K. Map drop pin
+const mapSvgDrop = document.getElementById('mapDropSvg');
+const mapDistanceBadge = document.getElementById('mapDistanceBadge');
+if (mapSvgDrop) {
+  let pinEl = null;
+  mapSvgDrop.addEventListener('click', (e) => {
+    const rect = mapSvgDrop.getBoundingClientRect();
+    const svgW = 400;
+    const svgH = 180;
+    const x = ((e.clientX - rect.left) / rect.width) * svgW;
+    const y = ((e.clientY - rect.top) / rect.height) * svgH;
+
+    // Remove old pin
+    if (pinEl) pinEl.remove();
+    pinEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    pinEl.setAttribute('x', x);
+    pinEl.setAttribute('y', y);
+    pinEl.setAttribute('font-size', '18');
+    pinEl.setAttribute('text-anchor', 'middle');
+    pinEl.textContent = '📍';
+    mapSvgDrop.appendChild(pinEl);
+
+    // Relative position: Nepal=70,110 Maldives=330,90 in 400x180 SVG
+    // Map click to rough 'percentage' and show distance from Maldives for fun
+    const distPx = Math.sqrt(Math.pow(x - 330, 2) + Math.pow(y - 90, 2));
+    const distKm = Math.round(distPx * 22); // rough scale
+    if (mapDistanceBadge) {
+      mapDistanceBadge.textContent = distKm < 500
+        ? `✈️ You're reading this very close to Maldives! (${distKm} km)`
+        : `💌 Your pin is about ${distKm.toLocaleString()} km from Maldives — still connected by heart ❤`;
+    }
+    playChime([523.25, 659.25]);
+  });
+}
+
+// L. Your Turn reply handler
+const yourTurnBtn = document.getElementById('yourTurnBtn');
+const yourTurnConfirm = document.getElementById('yourTurnConfirm');
+if (yourTurnBtn) {
+  yourTurnBtn.addEventListener('click', () => {
+    const text = document.getElementById('yourTurnText').value.trim();
+    if (!text) return;
+    playChime();
+    triggerConfetti(15);
+    yourTurnBtn.textContent = '💌 Sent ❤';
+    yourTurnBtn.disabled = true;
+    if (yourTurnConfirm) yourTurnConfirm.style.display = 'block';
+  });
+}
+
+// M. Future letter seal
+const sealBtn = document.getElementById('sealFutureBtn');
+if (sealBtn) {
+  sealBtn.addEventListener('click', () => {
+    const editor = document.getElementById('futureLetterText');
+    const sealed = document.getElementById('futureLetterSealed');
+    if (!editor || !sealed) return;
+    if (!editor.value.trim()) { editor.focus(); return; }
+    editor.style.display = 'none';
+    sealBtn.style.display = 'none';
+    sealed.style.display = 'block';
+    sealed.animate([{opacity:0,transform:'scale(0.85)'},{opacity:1,transform:'scale(1)'}],{duration:600,easing:'cubic-bezier(0.22,1,0.36,1)',fill:'forwards'});
+    playChime([523.25, 659.25, 783.99, 1046.50]);
+    triggerConfetti(12);
+  });
+}
+
+// N. Hidden Easter Egg
+const eggBtn = document.getElementById('easterEgg');
+const eggPopup = document.getElementById('easterPopup');
+if (eggBtn && eggPopup) {
+  eggBtn.addEventListener('click', () => {
+    eggPopup.classList.toggle('show');
+    if (eggPopup.classList.contains('show')) {
+      playChime([783.99, 1046.50]);
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!eggBtn.contains(e.target) && !eggPopup.contains(e.target)) {
+      eggPopup.classList.remove('show');
+    }
+  });
+}
+
