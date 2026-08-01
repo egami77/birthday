@@ -194,19 +194,26 @@
     <h2 class="section-title">Memory Jigsaw</h2>
     <p class="section-sub">Drag and snap the pieces onto their matching spots to restore the favorite snapshot.</p>
     <div class="puzzle-container">
-      <div class="puzzle-board" id="puzzleBoard">
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
-        <div class="puzzle-slot"></div>
+      <div class="puzzle-play-area">
+        <div class="puzzle-board" id="puzzleBoard">
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+          <div class="puzzle-slot"></div>
+        </div>
+        <div class="puzzle-pieces-pool" id="puzzlePiecesPool"></div>
+        <button class="btn btn-secondary" id="resetPuzzleBtn">🔄 Scramble Puzzle</button>
       </div>
-      <div class="puzzle-pieces-pool" id="puzzlePiecesPool"></div>
-      <button class="btn btn-secondary" id="resetPuzzleBtn">🔄 Scramble Puzzle</button>
+      <aside class="puzzle-hint-panel">
+        <div class="puzzle-hint-label">Hint</div>
+        <img class="puzzle-hint-image" src="IMG_20260613_132112633.jpg" alt="Puzzle hint image">
+        <div class="puzzle-hint-copy">Drag each piece onto the correct slot to reunite the memory. Use this picture as a reference while you complete the puzzle.</div>
+      </aside>
     </div>
   </div>
 </section>

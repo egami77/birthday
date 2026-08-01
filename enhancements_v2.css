@@ -7,6 +7,9 @@
   position: fixed; left: 1.5rem; top: 50%; transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 14px; z-index: 999;
 }
+
+/* Hide floating chapter dots (Table of Contents) — removed per user request */
+.ebook-chapters { display: none !important; }
 .chapter-dot {
   width: 10px; height: 10px; border-radius: 50%; background: rgba(240,207,142,0.3);
   border: 1px solid rgba(240,207,142,0.6); position: relative; transition: all 0.3s ease;
@@ -388,6 +391,31 @@
   text-align: center;
   padding-top: 0.4rem;
   letter-spacing: 0.03em;
+}
+
+/* Mobile tweaks for Friendship License to avoid internal scrollbars and overflow */
+@media (max-width: 760px) {
+  .friendship-license-card {
+    padding: 1rem;
+    width: calc(100% - 1.5rem);
+    margin: 1rem auto;
+    border-radius: 18px;
+  }
+  .license-top-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .license-body { grid-template-columns: 1fr; gap: 0.9rem; align-items: start; }
+  .license-photo-wrap { aspect-ratio: 9/16; width: 100%; border-radius: 16px; }
+  .license-photo-wrap img { width: 100%; height: auto; object-fit: cover; }
+  .license-name { font-size: clamp(1.25rem, 4vw, 1.6rem); }
+  .license-row { padding: 0.7rem 0.85rem; font-size: 0.9rem; }
+  .license-barcode { height: 44px; }
+  .license-note { font-size: 0.85rem; padding-top: 0.6rem; }
+
+  /* Hide native scrollbars inside the card on mobile to avoid the thin overlay seen on some devices */
+  .friendship-license-card, .friendship-license-card * {
+    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+  .friendship-license-card *::-webkit-scrollbar { display: none; width: 0; height: 0; }
 }
 
 /* ── NIGHT SKY WISH ── */

@@ -115,7 +115,7 @@ function getAudioContext() {
 function playWhoosh() {
   try {
     const ctx = getAudioContext();
-    const bufferSize = ctx.sampleRate * 0.45; 
+    const bufferSize = ctx.sampleRate * 0.45;
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
@@ -123,7 +123,7 @@ function playWhoosh() {
     }
     const noise = ctx.createBufferSource();
     noise.buffer = buffer;
-    
+
     const filter = ctx.createBiquadFilter();
     filter.type = 'bandpass';
     filter.frequency.value = 1000;
@@ -140,7 +140,7 @@ function playWhoosh() {
     filter.connect(gain);
     gain.connect(ctx.destination);
     noise.start();
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function playChime(freqs = [523.25, 659.25, 783.99, 1046.50]) { // C5, E5, G5, C6
@@ -151,7 +151,7 @@ function playChime(freqs = [523.25, 659.25, 783.99, 1046.50]) { // C5, E5, G5, C
       const gain = ctx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-      
+
       gain.gain.setValueAtTime(0.0, ctx.currentTime + idx * 0.08);
       gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + idx * 0.08 + 0.03);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.5);
@@ -161,7 +161,7 @@ function playChime(freqs = [523.25, 659.25, 783.99, 1046.50]) { // C5, E5, G5, C
       osc.start(ctx.currentTime + idx * 0.08);
       osc.stop(ctx.currentTime + idx * 0.08 + 0.65);
     });
-  } catch (e) {}
+  } catch (e) { }
 }
 
 // 3. Setup Initial Elements
@@ -170,7 +170,7 @@ if (heroImage && photoFiles.length) heroImage.src = photoFiles[0];
 
 // 4. Custom Particle Mouse Trail
 document.addEventListener('mousemove', (e) => {
-  if (Math.random() > 0.08) return; 
+  if (Math.random() > 0.08) return;
   const p = document.createElement('div');
   p.className = 'cursor-trail-particle';
   const symbols = ['❤', '♥', '✦', '✧', '🌸', '✨'];
@@ -184,7 +184,7 @@ document.addEventListener('mousemove', (e) => {
   const dx = (Math.random() - 0.5) * 80;
   const dy = -60 - Math.random() * 60;
   const r = (Math.random() - 0.5) * 180;
-  
+
   p.animate([
     { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 0.9 },
     { transform: `translate(${dx}px, ${dy}px) scale(0.1) rotate(${r}deg)`, opacity: 0 }
@@ -199,7 +199,7 @@ window.addEventListener('scroll', () => {
   const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
   const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
-  if(progressBar) progressBar.style.width = scrolled + "%";
+  if (progressBar) progressBar.style.width = scrolled + "%";
 });
 
 // 6. Section Scroll Reveals
@@ -230,7 +230,7 @@ setInterval(updateDaysCounter, 1000);
 
 // 8. 3D Tilt Interaction
 function applyTilt(el) {
-  if (window.innerWidth < 768) return; 
+  if (window.innerWidth < 768) return;
   el.addEventListener('mousemove', (e) => {
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -247,14 +247,14 @@ function applyTilt(el) {
 document.querySelectorAll('.polaroid, .book-page, .grow-item, .coupon-card-inner, .guess-card').forEach(applyTilt);
 
 // 9. Stars & Shooting Stars backdrop
-(function starsAndShooters(){
+(function starsAndShooters() {
   const canvas = document.querySelector('#hero .stars');
-  if(!canvas) return;
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  function resize(){ canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
+  function resize() { canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
   resize();
   window.addEventListener('resize', resize);
-  
+
   const starsArray = Array.from({ length: 110 }, () => ({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
@@ -279,9 +279,9 @@ document.querySelectorAll('.polaroid, .book-page, .grow-item, .coupon-card-inner
 
   setInterval(spawnShootingStar, 12000);
 
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     // Draw regular twinkling stars
     starsArray.forEach(p => {
       p.o += p.s;
@@ -296,12 +296,12 @@ document.querySelectorAll('.polaroid, .book-page, .grow-item, .coupon-card-inner
     if (shootingStar) {
       ctx.beginPath();
       const grad = ctx.createLinearGradient(
-        shootingStar.x, shootingStar.y, 
+        shootingStar.x, shootingStar.y,
         shootingStar.x - shootingStar.dx * 8, shootingStar.y - shootingStar.dy * 8
       );
       grad.addColorStop(0, `rgba(232, 167, 187, ${shootingStar.opacity})`);
       grad.addColorStop(1, 'rgba(232, 167, 187, 0)');
-      
+
       ctx.strokeStyle = grad;
       ctx.lineWidth = 1.8;
       ctx.moveTo(shootingStar.x, shootingStar.y);
@@ -331,7 +331,7 @@ function blowCandles() {
   if (candlesBlown) return;
   candlesBlown = true;
   playChime();
-  
+
   candles.forEach((c, i) => {
     setTimeout(() => {
       c.querySelector('.flame').classList.add('out');
@@ -373,7 +373,7 @@ function triggerConfetti(ctValue = 35) {
       c.style.pointerEvents = 'none';
       c.style.transition = 'transform 2.2s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 2.2s ease-out';
       document.body.appendChild(c);
-      
+
       requestAnimationFrame(() => {
         c.style.transform = `translateY(${95 + Math.random() * 10}vh) rotate(${Math.random() * 360}deg)`;
         c.style.opacity = '0';
@@ -457,7 +457,7 @@ storyFiles.forEach(src => {
   img.alt = 'Us';
   img.loading = 'lazy';
   img.addEventListener('click', () => playChime([261.63, 329.63, 392.00, 523.25])); // C4 Chord
-  img.onerror = function(){ placeholderImg(this, src); };
+  img.onerror = function () { placeholderImg(this, src); };
   storyPhotos.appendChild(img);
 });
 
@@ -478,7 +478,7 @@ allMediaFiles.forEach(file => {
 
 // 15. Theatre setup
 const theatreGrid = document.getElementById('theatreGrid');
-const theatreVideos = repeatFiles(videoFiles, 16); 
+const theatreVideos = repeatFiles(videoFiles, 16);
 theatreVideos.forEach(file => {
   const item = document.createElement('div');
   item.className = 'theatre-item';
@@ -489,7 +489,7 @@ theatreVideos.forEach(file => {
 
 // 16. Reasons setup
 const reasonsGrid = document.getElementById('reasonsGrid');
-const reasons = [ '🌸 Your smile', '💖 Your kindness', '🌎 Your strength', '✨ Your laugh', '🌙 Your dreams', '🌟 Your courage', '💫 Your grace', '🌺 Your warmth', '🍀 Your optimism', '🌈 Your spirit', '🌻 Your joy', '💎 Your resilience' ];
+const reasons = ['🌸 Your smile', '💖 Your kindness', '🌎 Your strength', '✨ Your laugh', '🌙 Your dreams', '🌟 Your courage', '💫 Your grace', '🌺 Your warmth', '🍀 Your optimism', '🌈 Your spirit', '🌻 Your joy', '💎 Your resilience'];
 reasons.forEach(r => {
   const div = document.createElement('div');
   div.className = 'reason-card';
@@ -502,12 +502,12 @@ reasons.forEach(r => {
 // 17. 25 Reasons list
 const reasons25Grid = document.getElementById('reasons25Grid');
 const reasons25 = [
-  'Your radiant smile', 'Your infinite kindness', 'Your beautiful laugh', 'Your gentle eyes', 
-  'Your gorgeous dreams', 'Your quiet strength', 'Your charming elegance', 'Your cozy warmth', 
-  'Your brave courage', 'Your bright optimism', 'Your golden spirit', 'Your simple joy', 
-  'Your amazing resilience', 'Your caring loyalty', 'Your deep wisdom', 'Your silly jokes', 
-  'Your true sincerity', 'Your artistic soul', 'Your sweet voice', 'Your generous heart', 
-  'Your helpful nature', 'Your wonderful passion', 'Your endless patience', 'Your stunning mind', 
+  'Your radiant smile', 'Your infinite kindness', 'Your beautiful laugh', 'Your gentle eyes',
+  'Your gorgeous dreams', 'Your quiet strength', 'Your charming elegance', 'Your cozy warmth',
+  'Your brave courage', 'Your bright optimism', 'Your golden spirit', 'Your simple joy',
+  'Your amazing resilience', 'Your caring loyalty', 'Your deep wisdom', 'Your silly jokes',
+  'Your true sincerity', 'Your artistic soul', 'Your sweet voice', 'Your generous heart',
+  'Your helpful nature', 'Your wonderful passion', 'Your endless patience', 'Your stunning mind',
   'Your warm presence'
 ];
 reasons25.forEach((r, i) => {
@@ -538,7 +538,7 @@ realPolaroids.forEach((src, i) => {
   const p = document.createElement('div');
   p.className = 'polaroid';
   p.style.setProperty('--rot', `${(Math.random() - 0.5) * 8}deg`);
-  p.innerHTML = `<img src="${src}" alt="Polaroid ${i+1}" onerror="placeholderImg(this,'${src}')">`;
+  p.innerHTML = `<img src="${src}" alt="Polaroid ${i + 1}" onerror="placeholderImg(this,'${src}')">`;
   p.onclick = () => openLightbox(src, false);
   polaroidWall.appendChild(p);
 });
@@ -581,7 +581,7 @@ if (scratchCanvas) {
   function initScratch() {
     scratchCanvas.width = scratchCanvas.parentElement.offsetWidth;
     scratchCanvas.height = scratchCanvas.parentElement.offsetHeight;
-    
+
     // Draw pretty scratch card surface
     const gradient = ctx.createLinearGradient(0, 0, scratchCanvas.width, scratchCanvas.height);
     gradient.addColorStop(0, '#e8a7bb');
@@ -589,7 +589,7 @@ if (scratchCanvas) {
     gradient.addColorStop(1, '#f0cf8e');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
-    
+
     ctx.font = "italic 1.1rem 'Cormorant Garamond', serif";
     ctx.fillStyle = "#1c0f1a";
     ctx.textAlign = "center";
@@ -606,7 +606,7 @@ if (scratchCanvas) {
     ctx.beginPath();
     ctx.arc(x, y, 22, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // Check transparency ratio occasionally
     if (Math.random() < 0.1) {
       const imgData = ctx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height);
@@ -639,13 +639,13 @@ if (scratchCanvas) {
     const { x, y } = getCoords(e);
     scratch(x, y);
   });
-  
+
   scratchCanvas.addEventListener('pointermove', (e) => {
     if (!isDrawing) return;
     const { x, y } = getCoords(e);
     scratch(x, y);
   });
-  
+
   document.addEventListener('pointerup', () => {
     isDrawing = false;
   });
@@ -654,34 +654,44 @@ if (scratchCanvas) {
 // 21. Jigsaw Puzzle Logic
 const puzzlePiecesPool = document.getElementById('puzzlePiecesPool');
 const puzzleBoard = document.getElementById('puzzleBoard');
+const resetPuzzleBtn = document.getElementById('resetPuzzleBtn');
 let activeDrag = null;
+let dragOffset = { x: 0, y: 0 };
+const puzzleImg = 'IMG_20260613_132112633.jpg';
+const puzzlePieceCount = 9;
 
 function initPuzzle() {
   if (!puzzlePiecesPool || !puzzleBoard) return;
   puzzlePiecesPool.innerHTML = '';
-  // Clean board slots
-  puzzleBoard.querySelectorAll('.puzzle-slot').forEach(slot => {
-    slot.innerHTML = '';
-  });
-  
-  const puzzleImg = 'IMG_20260613_132112633.jpg'; // Real target photo
-  const pieceIndexes = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  
-  // Scramble pieces
-  const scrambled = [...pieceIndexes].sort(() => Math.random() - 0.5);
-  
+  puzzleBoard.querySelectorAll('.puzzle-slot').forEach(slot => slot.innerHTML = '');
+  document.querySelectorAll('.puzzle-slot').forEach(slot => slot.classList.remove('highlight', 'correct-highlight'));
+
+  const boardRect = puzzleBoard.getBoundingClientRect();
+  const size = Math.min(boardRect.width, boardRect.height);
+  const pieceSize = Math.round(size / 3);
+  const backgroundSize = `${size}px ${size}px`;
+
+  const indexes = Array.from({ length: puzzlePieceCount }, (_, i) => i);
+  const scrambled = [...indexes].sort(() => Math.random() - 0.5);
+
   scrambled.forEach(idx => {
     const piece = document.createElement('div');
     piece.className = 'puzzle-piece';
     piece.dataset.correctIdx = idx;
+    piece.style.width = `${pieceSize}px`;
+    piece.style.height = `${pieceSize}px`;
     piece.style.backgroundImage = `url('${puzzleImg}')`;
-    
-    // Background offsets for 3x3 grid on 300px image
+    piece.style.backgroundSize = backgroundSize;
     const row = Math.floor(idx / 3);
     const col = idx % 3;
-    piece.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
-    
-    // Enable drag coordinates
+    piece.style.backgroundPosition = `-${col * pieceSize}px -${row * pieceSize}px`;
+    piece.style.position = 'relative';
+    piece.style.left = '';
+    piece.style.top = '';
+    piece.style.zIndex = '';
+    piece.style.pointerEvents = '';
+    piece.setAttribute('draggable', 'false');
+    piece.style.touchAction = 'none';
     piece.addEventListener('pointerdown', onDragStart);
     puzzlePiecesPool.appendChild(piece);
   });
@@ -689,76 +699,102 @@ function initPuzzle() {
 
 function onDragStart(e) {
   e.preventDefault();
-  activeDrag = e.target;
-  activeDrag.style.position = 'absolute';
-  activeDrag.style.zIndex = '1000';
-  document.addEventListener('pointermove', onDragging);
-  document.addEventListener('pointerup', onDragEnd);
+  const piece = e.currentTarget;
+  if (!piece || !piece.classList.contains('puzzle-piece')) return;
+
+  activeDrag = piece;
+  const rect = piece.getBoundingClientRect();
+  dragOffset.x = e.clientX - rect.left;
+  dragOffset.y = e.clientY - rect.top;
+
+  activeDrag.style.position = 'fixed';
+  activeDrag.style.left = `${Math.max(8, e.clientX - dragOffset.x)}px`;
+  activeDrag.style.top = `${Math.max(8, e.clientY - dragOffset.y)}px`;
+  activeDrag.style.zIndex = '10000';
+  activeDrag.style.pointerEvents = 'none';
+  document.body.appendChild(activeDrag);
+
+  try { activeDrag.setPointerCapture?.(e.pointerId); } catch (_) {}
+  document.addEventListener('pointermove', onDragging, { passive: false });
+  document.addEventListener('pointerup', onDragEnd, { passive: true });
 }
 
 function onDragging(e) {
   if (!activeDrag) return;
-  const boardRect = puzzleBoard.getBoundingClientRect();
-  // Center piece to pointer coordinates
-  activeDrag.style.left = `${e.clientX - boardRect.left - 50}px`;
-  activeDrag.style.top = `${e.clientY - boardRect.top - 50}px`;
+  e.preventDefault();
+  const x = e.clientX - dragOffset.x;
+  const y = e.clientY - dragOffset.y;
+  activeDrag.style.left = `${Math.max(8, x)}px`;
+  activeDrag.style.top = `${Math.max(8, y)}px`;
+
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const slot = el ? el.closest('.puzzle-slot') : null;
+  document.querySelectorAll('.puzzle-slot').forEach(s => s.classList.remove('highlight', 'correct-highlight'));
+  if (slot && slot.parentElement === puzzleBoard && slot.children.length === 0) {
+    slot.classList.add('highlight');
+    const targetIdx = Array.from(puzzleBoard.children).indexOf(slot);
+    if (parseInt(activeDrag.dataset.correctIdx, 10) === targetIdx) {
+      slot.classList.add('correct-highlight');
+    }
+  }
 }
 
 function onDragEnd(e) {
   if (!activeDrag) return;
   document.removeEventListener('pointermove', onDragging);
-  document.removeEventListener('pointerup', onDragEnd);
-  
-  const boardRect = puzzleBoard.getBoundingClientRect();
-  const x = e.clientX - boardRect.left;
-  const y = e.clientY - boardRect.top;
-  
-  let snapped = false;
-  
-  if (x >= 0 && x <= 300 && y >= 0 && y <= 300) {
-    const col = Math.floor(x / 100);
-    const row = Math.floor(y / 100);
-    const targetIdx = row * 3 + col;
-    
-    if (parseInt(activeDrag.dataset.correctIdx) === targetIdx) {
-      const slot = puzzleBoard.children[targetIdx];
-      if (slot.children.length === 0) {
-        // Correct snap!
-        slot.appendChild(activeDrag);
-        activeDrag.style.position = 'relative';
-        activeDrag.style.left = '0px';
-        activeDrag.style.top = '0px';
-        activeDrag.style.cursor = 'default';
-        activeDrag.removeEventListener('pointerdown', onDragStart);
-        playWhoosh();
-        snapped = true;
-      }
+  try { activeDrag.releasePointerCapture?.(e.pointerId); } catch (_) {}
+
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const slot = el ? el.closest('.puzzle-slot') : null;
+  let placed = false;
+
+  if (slot && slot.parentElement === puzzleBoard && slot.children.length === 0) {
+    const targetIdx = Array.from(puzzleBoard.children).indexOf(slot);
+    if (parseInt(activeDrag.dataset.correctIdx, 10) === targetIdx) {
+      slot.appendChild(activeDrag);
+      activeDrag.style.position = 'relative';
+      activeDrag.style.left = '0';
+      activeDrag.style.top = '0';
+      activeDrag.style.zIndex = '';
+      activeDrag.style.pointerEvents = '';
+      activeDrag.style.cursor = 'default';
+      activeDrag.removeEventListener('pointerdown', onDragStart);
+      playWhoosh();
+      placed = true;
     }
   }
-  
-  if (!snapped) {
-    // Return piece back to pool
-    puzzlePiecesPool.appendChild(activeDrag);
-    activeDrag.style.position = 'relative';
-    activeDrag.style.left = '';
-    activeDrag.style.top = '';
+
+  if (!placed) {
+    resetPuzzlePiece(activeDrag);
   }
-  
+
+  document.querySelectorAll('.puzzle-slot').forEach(s => s.classList.remove('highlight', 'correct-highlight'));
   activeDrag = null;
   checkPuzzleComplete();
+}
+
+function resetPuzzlePiece(piece) {
+  if (!piece) return;
+  piece.style.position = 'relative';
+  piece.style.left = '';
+  piece.style.top = '';
+  piece.style.zIndex = '';
+  piece.style.pointerEvents = '';
+  puzzlePiecesPool.appendChild(piece);
 }
 
 function checkPuzzleComplete() {
   let completed = true;
   puzzleBoard.querySelectorAll('.puzzle-slot').forEach((slot, idx) => {
-    if (slot.children.length === 0 || parseInt(slot.children[0].dataset.correctIdx) !== idx) {
+    if (slot.children.length === 0 || parseInt(slot.children[0].dataset.correctIdx, 10) !== idx) {
       completed = false;
     }
   });
-  if (completed) {
+  if (completed && !document.querySelector('.puzzle-success-message')) {
     playChime();
     triggerConfetti(28);
     const successMsg = document.createElement('div');
+    successMsg.className = 'puzzle-success-message';
     successMsg.style.cssText = "color:#e8a7bb; font-family:'Playfair Display',serif; font-size:1.2rem; margin-top:20px; font-weight:bold; text-align:center;";
     successMsg.textContent = "🎉 You put the memory back together! Spectacular work! 🎉";
     puzzleBoard.parentElement.appendChild(successMsg);
@@ -771,9 +807,9 @@ setTimeout(initPuzzle, 600);
 // 22. Digital Coupon Book actions
 document.querySelectorAll('.coupon-card').forEach(card => {
   card.addEventListener('click', () => {
-    if(!card.classList.contains('flipped')) {
+    if (!card.classList.contains('flipped')) {
       card.classList.add('flipped');
-      playChime([523.25, 659.25, 783.99]); 
+      playChime([523.25, 659.25, 783.99]);
       triggerConfetti(8);
     }
   });
@@ -799,7 +835,7 @@ if (padlock) {
       { transform: 'rotate(12deg)' },
       { transform: 'rotate(0deg)' }
     ], { duration: 300 });
-    
+
     // Check if birthday reached or bypass unlocked
     const birthdayDate = new Date('2026-08-24T00:00:00');
     if (new Date() >= birthdayDate) {
@@ -838,22 +874,22 @@ if (mapSvg) {
     circle.setAttribute('opacity', Math.random());
     mapSvg.appendChild(circle);
   }
-  
+
   // Constellation coordinate points
   const points = {
-    A: {x: 100, y: 150, n: 'Sirius'},
-    B: {x: 140, y: 130, n: 'Polaris'},
-    C: {x: 200, y: 110, n: 'Betelgeuse'},
-    D: {x: 260, y: 130, n: 'Capella'},
-    E: {x: 300, y: 180, n: 'Rigel'},
-    F: {x: 240, y: 220, n: 'Vega'},
-    G: {x: 160, y: 240, n: 'Spica'},
-    H: {x: 120, y: 200, n: 'Altair'}
+    A: { x: 100, y: 150, n: 'Sirius' },
+    B: { x: 140, y: 130, n: 'Polaris' },
+    C: { x: 200, y: 110, n: 'Betelgeuse' },
+    D: { x: 260, y: 130, n: 'Capella' },
+    E: { x: 300, y: 180, n: 'Rigel' },
+    F: { x: 240, y: 220, n: 'Vega' },
+    G: { x: 160, y: 240, n: 'Spica' },
+    H: { x: 120, y: 200, n: 'Altair' }
   };
-  
+
   // Connections
-  const links = [['A','B'], ['B','C'], ['C','D'], ['D','E'], ['E','F'], ['F','G'], ['G','H'], ['H','A'], ['C','G'], ['B','F']];
-  
+  const links = [['A', 'B'], ['B', 'C'], ['C', 'D'], ['D', 'E'], ['E', 'F'], ['F', 'G'], ['G', 'H'], ['H', 'A'], ['C', 'G'], ['B', 'F']];
+
   links.forEach(([from, to]) => {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('x1', points[from].x);
@@ -864,7 +900,7 @@ if (mapSvg) {
     line.setAttribute('stroke-width', '1');
     mapSvg.appendChild(line);
   });
-  
+
   // Render main labels
   Object.keys(points).forEach(k => {
     const pt = points[k];
@@ -903,10 +939,10 @@ function loadQuestion() {
   const questEl = document.getElementById('quizQuestionText');
   const optsEl = document.getElementById('quizOptions');
   const tracks = document.getElementById('quizTracks');
-  
-  if(!questEl || !optsEl) return;
+
+  if (!questEl || !optsEl) return;
   optsEl.innerHTML = '';
-  
+
   // Render tracks progress
   tracks.innerHTML = '';
   quizQuestions.forEach((_, idx) => {
@@ -914,8 +950,8 @@ function loadQuestion() {
     track.className = 'quiz-track';
     const fill = document.createElement('div');
     fill.className = 'quiz-track-fill';
-    if(idx < quizIdx) fill.style.width = '100%';
-    else if(idx === quizIdx) fill.style.width = '50%';
+    if (idx < quizIdx) fill.style.width = '100%';
+    else if (idx === quizIdx) fill.style.width = '50%';
     track.appendChild(fill);
     tracks.appendChild(track);
   });
@@ -940,10 +976,10 @@ function loadQuestion() {
 function submitAnswer(idx, btn) {
   const correctIdx = quizQuestions[quizIdx].c;
   const options = document.querySelectorAll('.quiz-option');
-  
+
   // Disable all
   options.forEach(opt => opt.style.pointerEvents = 'none');
-  
+
   if (idx === correctIdx) {
     btn.classList.add('correct');
     quizScore++;
@@ -964,15 +1000,15 @@ function submitAnswer(idx, btn) {
 function showQuizScore() {
   const container = document.getElementById('quizContainer');
   let pct = Math.round((quizScore / quizQuestions.length) * 100);
-  
+
   container.innerHTML = `
     <div class="quiz-score-view">
       <div class="quiz-score-badge">💖</div>
       <div class="quiz-score-title">Your Score: ${pct}%</div>
       <div class="quiz-score-desc">
-        ${pct === 100 
-          ? "Spectacular! You know her heart perfectly. True friendship is untouched by distance! ❤" 
-          : "Wonderfully done! Celebrating every detail of her amazing presence."}
+        ${pct === 100
+      ? "Spectacular! You know her heart perfectly. True friendship is untouched by distance! ❤"
+      : "Wonderfully done! Celebrating every detail of her amazing presence."}
       </div>
       <button class="btn btn-primary" onclick="window.resetQuiz()">🔄 Take Quiz Again</button>
     </div>
@@ -980,7 +1016,7 @@ function showQuizScore() {
   triggerConfetti(15);
 }
 
-window.resetQuiz = function() {
+window.resetQuiz = function () {
   quizIdx = 0;
   quizScore = 0;
   const container = document.getElementById('quizContainer');
@@ -1002,16 +1038,16 @@ let typed = false;
 function typeLetter() {
   if (typed) return; typed = true;
   const el = document.getElementById('letterText');
-  el.innerHTML = '<span class="cursor">&nbsp;</span>'; 
+  el.innerHTML = '<span class="cursor">&nbsp;</span>';
   let i = 0;
   function step() {
     if (i < letterFull.length) {
       const char = letterFull[i++];
       el.innerHTML = el.innerHTML.replace('<span class="cursor">&nbsp;</span>', '') + (char === '\n' ? '<br>' : char) + '<span class="cursor">&nbsp;</span>';
-      setTimeout(step, 45 + Math.random()*25);
+      setTimeout(step, 45 + Math.random() * 25);
     } else {
       const cursor = el.querySelector('.cursor');
-      if(cursor) cursor.remove();
+      if (cursor) cursor.remove();
     }
   }
   step();
@@ -1021,7 +1057,7 @@ const letterObserver = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { typeLetter(); } });
 }, { threshold: 0.18 });
 const letterSec = document.querySelector('#letter');
-if(letterSec) letterObserver.observe(letterSec);
+if (letterSec) letterObserver.observe(letterSec);
 
 // Handle font toggle
 const fontBtn = document.getElementById('toggleLetterFont');
@@ -1044,7 +1080,7 @@ if (fontBtn && letterContainer) {
 // 27. Envelope clicking
 const letterEnvelopeEl = document.getElementById('letterEnvelope');
 if (letterEnvelopeEl) {
-  letterEnvelopeEl.addEventListener('click', function(){
+  letterEnvelopeEl.addEventListener('click', function () {
     const content = document.getElementById('letterContent');
     if (content) {
       content.classList.toggle('open');
@@ -1064,9 +1100,9 @@ if (letterEnvelopeEl) {
 // 28. Memory Box clicking
 const memoryBoxEl = document.getElementById('memoryBox');
 if (memoryBoxEl) {
-  memoryBoxEl.addEventListener('click', function(e){
+  memoryBoxEl.addEventListener('click', function (e) {
     // If clicking target is image, open in lightbox instead of closing box
-    if(e.target.tagName === 'IMG') {
+    if (e.target.tagName === 'IMG') {
       e.stopPropagation();
       openLightbox(e.target.src, false);
       return;
@@ -1084,7 +1120,7 @@ if (memoryBoxEl) {
           img.src = src;
           img.alt = 'Memory';
           img.loading = 'lazy';
-          img.onerror = function(){ placeholderImg(this, src); };
+          img.onerror = function () { placeholderImg(this, src); };
           contents.appendChild(img);
         });
       }
@@ -1097,10 +1133,10 @@ if (memoryBoxEl) {
 // 29. Surprise button actions
 const finaleBtnEl = document.getElementById('finaleBtn');
 if (finaleBtnEl) {
-  finaleBtnEl.addEventListener('click', function(){
+  finaleBtnEl.addEventListener('click', function () {
     playChime([523.25, 659.25, 783.99, 1046.50]);
     triggerConfetti(45);
-    
+
     // Balloon / Heart visual impact
     const big = document.createElement('div');
     big.textContent = '❤';
@@ -1114,12 +1150,12 @@ if (finaleBtnEl) {
     big.style.textShadow = '0 0 25px rgba(232,167,187,0.8)';
     big.style.transition = 'all 1.25s cubic-bezier(0.34, 1.56, 0.64, 1)';
     document.body.appendChild(big);
-    
+
     requestAnimationFrame(() => {
       big.style.transform = 'translate(-50%, -50%) scale(1.4)';
       big.style.opacity = '1';
     });
-    
+
     setTimeout(() => {
       big.style.transform = 'translate(-50%, -50%) scale(2.2)';
       big.style.opacity = '0';
@@ -1145,7 +1181,7 @@ const loader = document.getElementById('loader');
 window.addEventListener('load', () => {
   requestAnimationFrame(() => {
     const fill = document.getElementById('heartFill');
-    if(fill) fill.style.strokeDashoffset = '0';
+    if (fill) fill.style.strokeDashoffset = '0';
   });
   if (beginBtn) setTimeout(() => beginBtn.classList.add('show'), 2200);
 });
@@ -1155,7 +1191,7 @@ let musicPlaying = false;
 const musicToggle = document.getElementById('musicToggle');
 
 function updateMusicIcon() {
-  if(!musicToggle) return;
+  if (!musicToggle) return;
   musicToggle.textContent = musicPlaying ? '🔊' : '🔇';
   musicToggle.style.opacity = musicPlaying ? '1' : '0.65';
 }
@@ -1167,7 +1203,7 @@ if (beginBtn) {
     getAudioContext();
     if (bgMusic) {
       bgMusic.volume = 0.55;
-      bgMusic.play().catch(() => {});
+      bgMusic.play().catch(() => { });
     }
     musicPlaying = true;
     updateMusicIcon();
@@ -1178,7 +1214,7 @@ if (beginBtn) {
 if (musicToggle) {
   musicToggle.addEventListener('click', () => {
     musicPlaying = !musicPlaying;
-    if (musicPlaying && bgMusic) bgMusic.play().catch(() => {});
+    if (musicPlaying && bgMusic) bgMusic.play().catch(() => { });
     else if (bgMusic) bgMusic.pause();
     updateMusicIcon();
     playChime([musicPlaying ? 783.99 : 523.25]);
@@ -1196,7 +1232,7 @@ function nextBirthday() {
 
 function renderCountdown() {
   const el = document.getElementById('countdown');
-  if(!el) return;
+  if (!el) return;
   const diff = nextBirthday() - new Date();
   if (diff <= 0) { el.innerHTML = ''; return; }
   const d = Math.floor(diff / 86400000);
@@ -1204,10 +1240,10 @@ function renderCountdown() {
   const m = Math.floor(diff / 60000) % 60;
   const s = Math.floor(diff / 1000) % 60;
   el.innerHTML = `
-    <div class="countdown-box"><b>${String(d).padStart(2,'0')}</b><span>Days</span></div>
-    <div class="countdown-box"><b>${String(h).padStart(2,'0')}</b><span>Hours</span></div>
-    <div class="countdown-box"><b>${String(m).padStart(2,'0')}</b><span>Minutes</span></div>
-    <div class="countdown-box"><b>${String(s).padStart(2,'0')}</b><span>Seconds</span></div>
+    <div class="countdown-box"><b>${String(d).padStart(2, '0')}</b><span>Days</span></div>
+    <div class="countdown-box"><b>${String(h).padStart(2, '0')}</b><span>Hours</span></div>
+    <div class="countdown-box"><b>${String(m).padStart(2, '0')}</b><span>Minutes</span></div>
+    <div class="countdown-box"><b>${String(s).padStart(2, '0')}</b><span>Seconds</span></div>
   `;
 }
 renderCountdown();
@@ -1215,32 +1251,32 @@ setInterval(renderCountdown, 1000);
 
 // 32. Twinkle Floaties (hearts & sparkles)
 const ambient = document.getElementById('ambient');
-const symbols = [ {cls:'heart', char:'❤'}, {cls:'heart', char:'♥'}, {cls:'sparkle', char:'✦'}, {cls:'sparkle', char:'✧'} ];
+const symbols = [{ cls: 'heart', char: '❤' }, { cls: 'heart', char: '♥' }, { cls: 'sparkle', char: '✦' }, { cls: 'sparkle', char: '✧' }];
 
 function spawnFloaty() {
-  if(!ambient) return;
+  if (!ambient) return;
   const isPetal = Math.random() < 0.25;
   const el = document.createElement('div');
   if (isPetal) {
     el.className = 'floaty petal';
   } else {
-    const symbol = symbols[Math.floor(Math.random()*symbols.length)];
+    const symbol = symbols[Math.floor(Math.random() * symbols.length)];
     el.className = `floaty ${symbol.cls}`;
     el.textContent = symbol.char;
   }
   const startX = Math.random() * 100;
   el.style.left = `${startX}vw`;
   ambient.appendChild(el);
-  
+
   const duration = 9 + Math.random() * 7;
   const drift = (Math.random() - 0.5) * 160;
   const rotate = (Math.random() - 0.5) * 360;
-  
+
   el.animate([
     { transform: 'translateX(0px) translateY(0px) rotate(0deg)', opacity: 0 },
     { transform: `translateX(${drift}px) translateY(-130vh) rotate(${rotate}deg)`, opacity: 1 }
-  ], { duration: duration * 1000, easing:'ease-out', fill:'forwards' });
-  
+  ], { duration: duration * 1000, easing: 'ease-out', fill: 'forwards' });
+
   setTimeout(() => el.remove(), duration * 1000 + 200);
 }
 setInterval(spawnFloaty, 750);
@@ -1281,7 +1317,7 @@ window.addEventListener('scroll', () => {
   const canvas = heroEl.querySelector('.stars');
   const frame = heroEl.querySelector('.hero-photo-frame');
   if (canvas) canvas.style.transform = `translateY(${factor * 60}px)`;    // slow
-  if (frame)  frame.style.transform  = `translateY(${factor * -30}px)`;   // slight opposite lift
+  if (frame) frame.style.transform = `translateY(${factor * -30}px)`;   // slight opposite lift
 }, { passive: true });
 
 // C. Magnetic button effect
@@ -1304,15 +1340,15 @@ document.addEventListener('click', (e) => {
   const size = 60;
   ring.style.width = `${size}px`;
   ring.style.height = `${size}px`;
-  ring.style.left = `${e.clientX - size/2}px`;
-  ring.style.top = `${e.clientY - size/2}px`;
+  ring.style.left = `${e.clientX - size / 2}px`;
+  ring.style.top = `${e.clientY - size / 2}px`;
   document.body.appendChild(ring);
   setTimeout(() => ring.remove(), 750);
 });
 
 // E. Ken Burns — apply to growing grid and carousel images
 function applyKenBurns(imgs) {
-  const classes = ['ken-burns-1','ken-burns-2','ken-burns-3'];
+  const classes = ['ken-burns-1', 'ken-burns-2', 'ken-burns-3'];
   imgs.forEach((img, i) => {
     img.classList.add(classes[i % 3]);
     img.parentElement.style.overflow = 'hidden';
@@ -1389,13 +1425,13 @@ if (countDisplay) {
       const confettiInterval = setInterval(() => {
         const c = document.createElement('div');
         c.className = 'cursor-trail-particle';
-        c.textContent = ['❤','✨','🌸','💖'][Math.floor(Math.random()*4)];
+        c.textContent = ['❤', '✨', '🌸', '💖'][Math.floor(Math.random() * 4)];
         c.style.left = `${20 + Math.random() * 60}vw`;
         c.style.top = `${Math.random() * 60 + 20}vh`;
         c.style.color = '#e8a7bb';
         document.body.appendChild(c);
-        c.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(2) translateY(-40px)'}],{duration:700,fill:'forwards'});
-        setTimeout(()=>c.remove(),750);
+        c.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(2) translateY(-40px)' }], { duration: 700, fill: 'forwards' });
+        setTimeout(() => c.remove(), 750);
       }, 100);
       setTimeout(() => clearInterval(confettiInterval), 25 * 60 + 500);
       countObserver.disconnect();
@@ -1414,11 +1450,11 @@ if (finaleSection) {
         snowInterval = setInterval(() => {
           const s = document.createElement('div');
           s.className = 'snow-heart';
-          s.textContent = ['❤','♥','💖','🌸'][Math.floor(Math.random()*4)];
+          s.textContent = ['❤', '♥', '💖', '🌸'][Math.floor(Math.random() * 4)];
           s.style.left = `${Math.random() * 100}vw`;
           s.style.animationDuration = `${3 + Math.random() * 4}s`;
           s.style.fontSize = `${0.9 + Math.random() * 1.2}rem`;
-          s.style.color = ['#e8a7bb','#f0cf8e','#b79fd6','#f2c6d3'][Math.floor(Math.random()*4)];
+          s.style.color = ['#e8a7bb', '#f0cf8e', '#b79fd6', '#f2c6d3'][Math.floor(Math.random() * 4)];
           document.body.appendChild(s);
           setTimeout(() => s.remove(), 7500);
         }, 350);
@@ -1434,12 +1470,12 @@ if (finaleSection) {
 // J. Open When letters
 const openWhenGrid = document.getElementById('openWhenGrid');
 const openWhenLetters = [
-  { icon:'😔', title:'Open when you miss me', text:'If you are missing me right now — good. It means something real exists between us that distance cannot shrink. I miss you too, every single day in ways I never expected. Keep this note next to you and know I am thinking of you in whatever room I am in right now. ❤' },
-  { icon:'😰', title:'Open when you\'re stressed', text:'Breathe in for 4 counts. Then out for 4. Again. Do you feel it? You are capable. You have survived every hard day before this one and you will survive this. The stress feels permanent but it never is. You are stronger than today. I believe in you more than you know. 🌸' },
-  { icon:'🌊', title:'Open when you feel far from home', text:'Home is not only a place — it is also a feeling you carry within you. Your warmth, your laughter, your heart: that is home. And wherever you go across this ocean, you take it all with you. You are never truly far. Someone across the sea already has a piece of you. 💙' },
-  { icon:'🎉', title:'Open when you want to celebrate', text:'Yes! You deserve every celebration! Whatever just happened — a small win, finishing a hard day, getting through the week — it all counts. Pop something, play your favorite song, and know I am clapping for you right now from Nepal. You are amazing and this is your moment. 🥂' },
-  { icon:'🌙', title:'Open when you can\'t sleep', text:'The night gets quiet and your mind starts racing. I know that feeling. On those nights, look at the stars if you can. We are always under the same sky. Count three things you are grateful for. Then three things that make you smile. I hope I am on that last list. Goodnight. ❤' },
-  { icon:'💪', title:'Open when you doubt yourself', text:'Someone who has come this far, done this much, and smiled through it all does not get to call herself ordinary. You are a force of nature disguised as a humble, soft-hearted person. The world has no idea what is coming when you decide to fully rise. I already know. 🌟' }
+  { icon: '😔', title: 'Open when you miss me', text: 'If you are missing me right now — good. It means something real exists between us that distance cannot shrink. I miss you too, every single day in ways I never expected. Keep this note next to you and know I am thinking of you in whatever room I am in right now. ❤' },
+  { icon: '😰', title: 'Open when you\'re stressed', text: 'Breathe in for 4 counts. Then out for 4. Again. Do you feel it? You are capable. You have survived every hard day before this one and you will survive this. The stress feels permanent but it never is. You are stronger than today. I believe in you more than you know. 🌸' },
+  { icon: '🌊', title: 'Open when you feel far from home', text: 'Home is not only a place — it is also a feeling you carry within you. Your warmth, your laughter, your heart: that is home. And wherever you go across this ocean, you take it all with you. You are never truly far. Someone across the sea already has a piece of you. 💙' },
+  { icon: '🎉', title: 'Open when you want to celebrate', text: 'Yes! You deserve every celebration! Whatever just happened — a small win, finishing a hard day, getting through the week — it all counts. Pop something, play your favorite song, and know I am clapping for you right now from Nepal. You are amazing and this is your moment. 🥂' },
+  { icon: '🌙', title: 'Open when you can\'t sleep', text: 'The night gets quiet and your mind starts racing. I know that feeling. On those nights, look at the stars if you can. We are always under the same sky. Count three things you are grateful for. Then three things that make you smile. I hope I am on that last list. Goodnight. ❤' },
+  { icon: '💪', title: 'Open when you doubt yourself', text: 'Someone who has come this far, done this much, and smiled through it all does not get to call herself ordinary. You are a force of nature disguised as a humble, soft-hearted person. The world has no idea what is coming when you decide to fully rise. I already know. 🌟' }
 ];
 if (openWhenGrid) {
   openWhenLetters.forEach(item => {
@@ -1526,7 +1562,7 @@ if (sealBtn) {
     editor.style.display = 'none';
     sealBtn.style.display = 'none';
     sealed.style.display = 'block';
-    sealed.animate([{opacity:0,transform:'scale(0.85)'},{opacity:1,transform:'scale(1)'}],{duration:600,easing:'cubic-bezier(0.22,1,0.36,1)',fill:'forwards'});
+    sealed.animate([{ opacity: 0, transform: 'scale(0.85)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 600, easing: 'cubic-bezier(0.22,1,0.36,1)', fill: 'forwards' });
     playChime([523.25, 659.25, 783.99, 1046.50]);
     triggerConfetti(12);
   });

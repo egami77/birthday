@@ -274,12 +274,19 @@ a { color: inherit; text-decoration: none; }
 .scratch-canvas { position: absolute; top:0; left:0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; transition: opacity 0.5s ease; }
 
 /* 4. Jigsaw Puzzle */
-.puzzle-container { max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.puzzle-board { width: 300px; height: 300px; border: 2.5px dashed rgba(240, 207, 142, 0.4); border-radius: 8px; position: relative; background: rgba(0,0,0,0.2); }
-.puzzle-slot { width: 100px; height: 100px; border: 0.5px solid rgba(255,255,255,0.06); float: left; position: relative; }
-.puzzle-pieces-pool { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 110px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-.puzzle-piece { width: 96px; height: 96px; border-radius: 6px; cursor: grab; background-size: 300px 300px; background-repeat: no-repeat; border: 1px solid #d3ac68; box-shadow: 0 4px 10px rgba(0,0,0,0.4); transition: transform 0.2s, box-shadow 0.2s; touch-action: none; }
+.puzzle-container { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: minmax(320px, 1fr) minmax(280px, 340px); gap: 22px; align-items: start; }
+.puzzle-play-area { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.puzzle-board { width: 100%; max-width: 380px; aspect-ratio: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); border: 2.5px dashed rgba(240, 207, 142, 0.4); border-radius: 18px; position: relative; background: rgba(0,0,0,0.2); overflow: hidden; }
+.puzzle-slot { width: 100%; height: 100%; border: 0.5px solid rgba(255,255,255,0.06); position: relative; }
+.puzzle-slot.highlight { outline: 3px solid rgba(232,167,187,0.9); transition: outline 120ms ease-in-out; }
+.puzzle-slot.correct-highlight { outline: 3px solid rgba(145,230,168,0.95); }
+.puzzle-pieces-pool { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%; min-height: 120px; padding: 12px; border-radius: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+.puzzle-piece { width: 96px; height: 96px; border-radius: 10px; cursor: grab; background-size: cover; background-repeat: no-repeat; border: 1px solid #d3ac68; box-shadow: 0 4px 12px rgba(0,0,0,0.35); transition: transform 0.2s, box-shadow 0.2s; touch-action: none; }
 .puzzle-piece:active { cursor: grabbing; transform: scale(1.05); box-shadow: 0 8px 18px rgba(0,0,0,0.6); }
+.puzzle-hint-panel { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
+.puzzle-hint-label { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.18em; color: #f0cf8e; }
+.puzzle-hint-image { width: 100%; border-radius: 18px; object-fit: cover; aspect-ratio: 4/3; border: 1px solid rgba(240,207,142,0.18); }
+.puzzle-hint-copy { font-size: 0.95rem; line-height: 1.6; color: rgba(248,236,223,0.92); }
 
 /* 5. Time Capsule */
 .capsule-card { max-width: 440px; margin: 0 auto; text-align: center; padding: 30px 20px; }
@@ -327,6 +334,42 @@ a { color: inherit; text-decoration: none; }
   .coupons-grid { grid-template-columns: 1fr; }
   .glass { padding: 1.5rem; }
   .reasons-grid { grid-template-columns: repeat(2, 1.5fr); }
+}
+/* Mobile usability tweaks: larger touch targets, spacing, and responsive puzzle */
+@media (max-width: 760px) {
+  /* Increase readable spacing and reduce visual density */
+  .section { padding: clamp(1.2rem, 4vw, 2.2rem); }
+  .section-inner { gap: 12px; }
+  .section-title { font-size: clamp(1.6rem, 5.2vw, 2.2rem); }
+  .section-sub { font-size: 0.98rem; line-height: 1.6; }
+
+  /* Bigger buttons for touch */
+  .btn { padding: 12px 18px; font-size: 1rem; border-radius: 14px; }
+
+  /* Make inputs and textareas easier to use */
+  textarea, input, .capsule-input, .your-turn-textarea, .future-letter-editor { font-size: 1rem; width: 100%; min-height: 48px; }
+
+  /* Reduce heavy shadows and animations for smoother performance */
+  .hero-photo-frame, .glass, .polaroid, .book-page, .puzzle-container { box-shadow: none; }
+  * { -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
+
+  /* Responsive puzzle sizing */
+  .puzzle-container { grid-template-columns: 1fr; }
+  .puzzle-board { width: 100%; max-width: 100%; height: auto; }
+  .puzzle-slot { width: 100%; height: auto; min-height: 0; }
+  .puzzle-piece { width: 88px; height: 88px; }
+  .puzzle-hint-panel { width: 100%; }
+
+  /* Make interactive areas more touch-friendly */
+  .chapter-dot, .coupon-card, .quiz-option, .polaroid, .slide, .coupon-card { touch-action: manipulation; }
+
+  /* Stack some complex layouts vertically to avoid overflow */
+  .license-body { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .split-screen-section { height: auto; display: block; }
+  .split-pane { position: relative; width: 100%; height: auto; }
+
+  /* Improve scrolling performance by disabling heavy transforms */
+  .floaty, .cursor-trail-particle { display: none; }
 }
 @media (min-width: 1024px) { .growing-grid { grid-template-columns:repeat(7,1fr); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.001s !important; transition-duration:.001s !important; } }
