@@ -86,11 +86,15 @@ function refreshChapterDots() {
 refreshChapterDots();
 
 let scrollTick = null;
+const pendingScrollWork = new Set();
 function scheduleScrollWork(callback) {
+  pendingScrollWork.add(callback);
   if (scrollTick) return;
   scrollTick = requestAnimationFrame(() => {
     scrollTick = null;
-    callback();
+    const callbacks = [...pendingScrollWork];
+    pendingScrollWork.clear();
+    callbacks.forEach(cb => cb());
   });
 }
 window.addEventListener('scroll', () => {
@@ -135,8 +139,8 @@ splitSecNode.innerHTML = `
         <div class="split-label">Then</div>
       </div>
       <div class="split-split" id="splitdivider"></div>
-      <div class="split-pane right" style="clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%)">
-        <img src="IMG-20260123-WA0001.jpg " onerror="window.placeholderImg && placeholderImg(this,'Now')">
+      <div class="split-pane right">
+        <img src="IMG-20260123-WA0001.jpg" onerror="window.placeholderImg && placeholderImg(this,'Now')">
         <div class="split-label">Now</div>
       </div>
     </div>
@@ -150,12 +154,25 @@ const splitscreen = document.getElementById('splitscreen');
 const splitdivider = document.getElementById('splitdivider');
 const rightPane = splitscreen?.querySelector('.split-pane.right');
 
+function isMobileView() {
+  return window.matchMedia('(max-width: 760px)').matches;
+}
+
 function setSplitPct(pct) {
   if (!rightPane || !splitdivider) return;
+  if (isMobileView()) {
+    // On mobile the panes stack — remove clipping and hide divider
+    rightPane.style.clipPath = 'none';
+    splitdivider.style.display = 'none';
+    return;
+  }
   const p = Math.max(0, Math.min(pct, 100));
   splitdivider.style.left = p + '%';
+  splitdivider.style.display = 'block';
   rightPane.style.clipPath = `polygon(${p}% 0, 100% 0, 100% 100%, ${p}% 100%)`;
 }
+setSplitPct(50);
+
 window.addEventListener('scroll', () => {
   if (!splitscreen) return;
   scheduleScrollWork(() => {
@@ -167,17 +184,47 @@ window.addEventListener('scroll', () => {
   });
 }, { passive: true });
 
-// Drag setup
+// Drag setup — pointer events (mouse + touch)
 let isDraggingSplit = false;
-splitdivider?.addEventListener('mousedown', () => isDraggingSplit = true);
-window.addEventListener('mouseup', () => isDraggingSplit = false);
-window.addEventListener('mousemove', e => {
+function startSplitDrag(e) {
+  isDraggingSplit = true;
+  if (splitscreen && !splitscreen.classList.contains('dragging')) {
+    splitscreen.classList.add('dragging');
+  }
+  try { splitdivider?.setPointerCapture?.(e.pointerId); } catch (_) {}
+}
+function moveSplitDrag(e) {
   if (!isDraggingSplit || !splitscreen) return;
   const rect = splitscreen.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const pct = (x / rect.width) * 100;
   setSplitPct(pct);
-});
+}
+function endSplitDrag() {
+  if (!isDraggingSplit) return;
+  isDraggingSplit = false;
+  splitscreen?.classList.remove('dragging');
+}
+splitdivider?.addEventListener('pointerdown', startSplitDrag);
+window.addEventListener('pointermove', moveSplitDrag);
+window.addEventListener('pointerup', endSplitDrag);
+window.addEventListener('pointercancel', endSplitDrag);
+// Prevent page scrolling while dragging the divider
+splitdivider?.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+// Keyboard accessibility: arrow keys move the divider
+if (splitdivider) {
+  splitdivider.setAttribute('tabindex', '0');
+  splitdivider.setAttribute('role', 'slider');
+  splitdivider.setAttribute('aria-label', 'Then vs Now slider');
+  splitdivider.addEventListener('keydown', e => {
+    if (!rightPane) return;
+    const step = e.key === 'ArrowLeft' ? -5 : e.key === 'ArrowRight' ? 5 : 0;
+    if (!step) return;
+    e.preventDefault();
+    const current = parseFloat(getComputedStyle(splitdivider).left) || 50;
+    setSplitPct(current + step);
+  });
+}
 
 /* ══════════════════════════════════════════
    4. CONVERSATION TEXT HISTORY MOCK UP

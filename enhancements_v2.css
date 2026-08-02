@@ -37,8 +37,10 @@
 .split-split {
   position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
   background: #f0cf8e; box-shadow: 0 0 10px #f0cf8e; z-index: 10;
-  cursor: ew-resize; transform: translateX(-50%);
+  cursor: ew-resize !important; transform: translateX(-50%);
 }
+.split-split:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.split-screen-section.dragging, .split-screen-section.dragging * { user-select: none; -webkit-user-select: none; }
 .split-label {
   position: absolute; bottom: 2rem; background: rgba(26,11,22,0.75);
   padding: 6px 14px; border-radius: 99px; font-family: 'Playfair Display', serif;
@@ -47,6 +49,15 @@
 }
 .split-pane.left .split-label { left: 2rem; }
 .split-pane.right .split-label { right: 2rem; }
+
+/* Mobile: stack "Then" and "Now" vertically, remove clipping */
+@media (max-width: 760px) {
+  .split-screen-section { height: auto; display: block; }
+  .split-pane { width: 100%; height: auto; position: relative; }
+  .split-pane img { position: relative; aspect-ratio: 4/3; object-fit: cover; }
+  .split-split { display: none !important; }
+  .split-pane.right { clip-path: none !important; }
+}
 
 /* ── TEXTING CHAT UI ── */
 .chat-container {
