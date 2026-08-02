@@ -85,29 +85,37 @@ function refreshChapterDots() {
 }
 refreshChapterDots();
 
+let scrollTick = null;
+function scheduleScrollWork(callback) {
+  if (scrollTick) return;
+  scrollTick = requestAnimationFrame(() => {
+    scrollTick = null;
+    callback();
+  });
+}
 window.addEventListener('scroll', () => {
-  const dots = document.querySelectorAll('.chapter-dot');
-  let activeIdx = 0;
-  document.querySelectorAll('.section').forEach((sec, idx) => {
-    const rect = sec.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.4) activeIdx = idx;
-  });
-  dots.forEach((dot, idx) => {
-    dot.classList.toggle('active', idx === activeIdx);
-  });
-  // Adjust Soundtrack / ocean wave volume on scroll
-  const distSec = document.getElementById('distance');
-  if (distSec && waveNode) {
-    const r = distSec.getBoundingClientRect();
-    const isVis = r.top < window.innerHeight && r.bottom > 0;
-    const tgt = isVis ? 0.05 : 0;
-    waveNode.gain.gain.setTargetAtTime(tgt, audioCtx.currentTime, 1.2);
-    // Ocean wave noise frequency cycles
-    if (isVis) {
-      const f = 150 + Math.sin(Date.now() / 2000) * 80;
-      waveNode.filter.frequency.setValueAtTime(f, audioCtx.currentTime);
+  scheduleScrollWork(() => {
+    const dots = document.querySelectorAll('.chapter-dot');
+    let activeIdx = 0;
+    document.querySelectorAll('.section').forEach((sec, idx) => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.4) activeIdx = idx;
+    });
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === activeIdx);
+    });
+    const distSec = document.getElementById('distance');
+    if (distSec && waveNode) {
+      const r = distSec.getBoundingClientRect();
+      const isVis = r.top < window.innerHeight && r.bottom > 0;
+      const tgt = isVis ? 0.05 : 0;
+      waveNode.gain.gain.setTargetAtTime(tgt, audioCtx.currentTime, 1.2);
+      if (isVis) {
+        const f = 150 + Math.sin(Date.now() / 2000) * 80;
+        waveNode.filter.frequency.setValueAtTime(f, audioCtx.currentTime);
+      }
     }
-  }
+  });
 }, { passive: true });
 
 /* ══════════════════════════════════════════
@@ -150,11 +158,13 @@ function setSplitPct(pct) {
 }
 window.addEventListener('scroll', () => {
   if (!splitscreen) return;
-  const r = splitscreen.getBoundingClientRect();
-  if (r.top < window.innerHeight && r.bottom > 0) {
-    const track = 1 - (r.top / window.innerHeight);
-    setSplitPct(track * 100);
-  }
+  scheduleScrollWork(() => {
+    const r = splitscreen.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) {
+      const track = 1 - (r.top / window.innerHeight);
+      setSplitPct(track * 100);
+    }
+  });
 }, { passive: true });
 
 // Drag setup

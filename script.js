@@ -195,12 +195,22 @@ document.addEventListener('mousemove', (e) => {
 
 // 5. Scroll Progress Bar
 const progressBar = document.getElementById('scrollProgressBar');
-window.addEventListener('scroll', () => {
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+let scrollFrame = null;
+function updateScrollProgress() {
   const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
   const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
   if (progressBar) progressBar.style.width = scrolled + "%";
-});
+}
+window.addEventListener('scroll', () => {
+  if (scrollFrame) return;
+  scrollFrame = requestAnimationFrame(() => {
+    scrollFrame = null;
+    updateScrollProgress();
+  });
+}, { passive: true });
+updateScrollProgress();
 
 // 6. Section Scroll Reveals
 const reveals = document.querySelectorAll('.reveal-el');
@@ -249,7 +259,7 @@ document.querySelectorAll('.polaroid, .book-page, .grow-item, .coupon-card-inner
 // 9. Stars & Shooting Stars backdrop
 (function starsAndShooters() {
   const canvas = document.querySelector('#hero .stars');
-  if (!canvas) return;
+  if (!canvas || isMobile) return;
   const ctx = canvas.getContext('2d');
   function resize() { canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
   resize();
@@ -360,6 +370,7 @@ document.getElementById('resetCakeBtn').addEventListener('click', () => {
 
 // Confetti burst generator
 function triggerConfetti(ctValue = 35) {
+  if (isMobile) ctValue = Math.min(ctValue, 14);
   const emojis = ['🎈', '🎉', '✨', '🌸', '❤', '⭐', '🎊', '💖'];
   for (let i = 0; i < ctValue; i++) {
     setTimeout(() => {
@@ -1254,7 +1265,7 @@ const ambient = document.getElementById('ambient');
 const symbols = [{ cls: 'heart', char: '❤' }, { cls: 'heart', char: '♥' }, { cls: 'sparkle', char: '✦' }, { cls: 'sparkle', char: '✧' }];
 
 function spawnFloaty() {
-  if (!ambient) return;
+  if (!ambient || isMobile) return;
   const isPetal = Math.random() < 0.25;
   const el = document.createElement('div');
   if (isPetal) {
@@ -1309,7 +1320,7 @@ if (beginBtnEl) {
 // B. Hero parallax on scroll (stars slow, frame fast)
 window.addEventListener('scroll', () => {
   const heroEl = document.getElementById('hero');
-  if (!heroEl) return;
+  if (!heroEl || isMobile) return;
   const scrollY = window.scrollY;
   const heroH = heroEl.offsetHeight;
   if (scrollY > heroH) return;
@@ -1335,6 +1346,7 @@ document.querySelectorAll('.btn').forEach(btn => {
 
 // D. Ripple / glow ring on every click
 document.addEventListener('click', (e) => {
+  if (isMobile) return;
   const ring = document.createElement('div');
   ring.className = 'ripple-ring';
   const size = 60;
